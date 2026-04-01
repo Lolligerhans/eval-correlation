@@ -18,6 +18,10 @@ def extract_wv(comment):
         return float(match.group(1))
     # Evaluation is checkmate in some number of moves
     match = re.search(r"wv=(-?)[M#]\d*", comment)
+    if not match:
+        # Some kind of bug or unexpected situation
+        print(match)
+        print(comment)
     assert match
     return +100 if match.group(1) == "" else -100
 
