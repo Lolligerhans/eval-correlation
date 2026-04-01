@@ -55,7 +55,10 @@ declare -r test_games="test/games.pgn"
 
 # Default command (when no arguments are given)
 command_default() {
-    # Use smaller testing file
+    subcommand swiss
+}
+
+command_test() {
     "$python_binary" main.py "test/games.pgn"
 }
 
