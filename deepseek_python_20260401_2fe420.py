@@ -1,20 +1,22 @@
 import chess.pgn
 import re
 import numpy as np
-from collections import defaultdict
+
 
 def extract_wv(comment):
     """Extract the 'wv' value from a move comment string."""
     if not comment:
         return None
-    match = re.search(r'wv=([-+]?\d+\.?\d*)', comment)
+    match = re.search(r"wv=([-+]?\d+\.?\d*)", comment)
     if match:
         return float(match.group(1))
     return None
 
+
 def is_book_move(comment):
     """Check if the move comment indicates a book move."""
     return comment and "book" in comment
+
 
 def normalize_sequence(vals):
     """
@@ -33,6 +35,7 @@ def normalize_sequence(vals):
         return np.zeros(n)  # all constant after detrending
     return np.array(detrended) / std
 
+
 def cross_correlation(w, b, max_lag=10):
     """
     Compute Pearson correlation between w and b for lags -max_lag..+max_lag.
@@ -43,12 +46,12 @@ def cross_correlation(w, b, max_lag=10):
         raise ValueError("Lengths of w and b must be equal")
     best_lag = 0
     best_corr = -np.inf
-    for lag in range(-max_lag, max_lag+1):
+    for lag in range(-max_lag, max_lag + 1):
         if lag >= 0:
             # w[0:n-lag] vs b[lag:n]
             if n - lag == 0:
                 continue
-            w_slice = w[0:n-lag]
+            w_slice = w[0 : n - lag]
             b_slice = b[lag:n]
         else:
             # w[-lag:n] vs b[0:n+lag]
@@ -56,17 +59,18 @@ def cross_correlation(w, b, max_lag=10):
             if n - pos_lag == 0:
                 continue
             w_slice = w[pos_lag:n]
-            b_slice = b[0:n-pos_lag]
+            b_slice = b[0 : n - pos_lag]
         # Pearson correlation coefficient
         if len(w_slice) < 2:
             continue
-        corr = np.corrcoef(w_slice, b_slice)[0,1]
+        corr = np.corrcoef(w_slice, b_slice)[0, 1]
         if np.isnan(corr):
             continue
         if corr > best_corr:
             best_corr = corr
             best_lag = lag
     return best_lag
+
 
 def process_game(game):
     """Extract evaluation sequences and compute cross-correlation lag."""
@@ -82,25 +86,25 @@ def process_game(game):
     first_non_book_found = False
 
     while node.variations and not stop:
-        node = node.variation(0)   # take main line
+        node = node.variation(0)  # take main line
         comment = node.comment
         if not comment:
             continue
         if is_book_move(comment):
-            continue   # skip book moves entirely
+            continue  # skip book moves entirely
         # Not a book move: use it
         wv = extract_wv(comment)
         if wv is None:
-            continue   # no evaluation, skip
+            continue  # no evaluation, skip
         # Determine side: ply is 1-indexed
         ply = node.ply()
-        if ply % 2 == 1:   # white's move
+        if ply % 2 == 1:  # white's move
             white_vals.append(wv)
-        else:              # black's move
+        else:  # black's move
             black_vals.append(wv)
         # Check stop condition: absolute evaluation exceeds 4.0
         if abs(wv) > 4.0:
-            stop = True   # we include this move, but stop after processing it
+            stop = True  # we include this move, but stop after processing it
 
     # If we didn't get any moves, skip
     if not white_vals or not black_vals:
@@ -123,8 +127,10 @@ def process_game(game):
     lag = cross_correlation(w_norm, b_norm)
     return lag, elo_diff
 
+
 def main():
     import sys
+
     if len(sys.argv) != 2:
         print("Usage: python script.py games.pgn")
         sys.exit(1)
@@ -145,11 +151,12 @@ def main():
                 elif elo_diff < 0:
                     neg_lags.append(lag)
 
-    avg_pos = np.mean(pos_lags) if pos_lags else float('nan')
-    avg_neg = np.mean(neg_lags) if neg_lags else float('nan')
+    avg_pos = np.mean(pos_lags) if pos_lags else float("nan")
+    avg_neg = np.mean(neg_lags) if neg_lags else float("nan")
 
     print(f"Average maximal correlation position (positive Elo diff): {avg_pos:.2f}")
     print(f"Average maximal correlation position (negative Elo diff): {avg_neg:.2f}")
+
 
 if __name__ == "__main__":
     main()
