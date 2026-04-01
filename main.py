@@ -122,7 +122,12 @@ def process_game(game):
         else:  # black's move
             black_vals.append(wv)
         # if abs(wv) > 4.0:
-        if abs(white_vals[-1] > 4.0) and abs(black_vals[-1] > 4.0):
+        if (
+            len(white_vals) > 0
+            and len(black_vals) > 0
+            and abs(white_vals[-1] > 4.0)
+            and abs(black_vals[-1] > 4.0)
+        ):
             break
 
     # If we didn't get any moves, skip
