@@ -114,8 +114,10 @@ def process_game(game):
 
     white_elo = int(game.headers.get("WhiteElo", 0))
     black_elo = int(game.headers.get("BlackElo", 0))
-    assert white_elo != 0
-    assert black_elo != 0
+    # Ignore obvious error cases such as elo equal to 0. May include failure to
+    # parse elo?
+    if white_elo < 2000 or black_elo < 2000:
+        return None, None
     elo_diff: int = white_elo - black_elo
 
     # Traverse the mainline moves
