@@ -62,7 +62,10 @@ def cross_correlation(w, b, max_lag=10):
     """
     assert len(w) == len(b)
     n = len(w)
-    assert n > 12  # Logic may not work otherwise
+    if not n >= 12:
+        print(w)
+        print(b)
+    assert n >= 12  # Logic may not work otherwise
     max_lag = min(10, n - 1)
     if n != len(b):
         # Presumably needed for implementation. Not needed mathematically.
