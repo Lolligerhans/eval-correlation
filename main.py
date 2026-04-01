@@ -11,6 +11,10 @@ def extract_wv(comment):
     assert comment is not None
     if comment == "3-Fold repetition":
         return 0
+    if comment == "White mates":
+        return 100
+    if comment == "Black mates":
+        return -100
     if not comment:
         return None
     match = re.search(r"wv=([-+]?\d+\.?\d*)", comment)
