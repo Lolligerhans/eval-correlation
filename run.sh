@@ -59,14 +59,23 @@ command_default() {
     "$python_binary" main.py "test/games.pgn"
 }
 
-command_analyze() {
+command_divp() {
     # Use real data as input
-    "$python_binary" main.py ./TCEC_Season_29_-_Division_P.pgn
+    analyze_files data/TCEC_Season_29_-_Division_P.pgn
+}
+
+command_swiss() {
+    analyze_files data/*Swiss*.pgn
 }
 
 # ╭──────────────────────╮
 # │ 🖩 Utils             │
 # ╰──────────────────────╯
+# Run analysis scrip on all files in $@
+analyze_files() {
+    "$python_binary" main.py "$@"
+}
+
 # ╭──────────────────────╮
 # │ 𝑓 Functional         │
 # ╰──────────────────────╯
