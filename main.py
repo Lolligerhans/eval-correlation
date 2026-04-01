@@ -1,6 +1,7 @@
 import chess.pgn
 import re
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def extract_wv(comment):
@@ -140,7 +141,7 @@ def process_game(game):
             white_vals.append(wv)
         else:  # black's move
             black_vals.append(wv)
-        # if abs(wv) > 4.0:
+        # Stop when both sides have at least one evaluation and both exceed 4.0 in absolute value
         if (
             len(white_vals) > 0
             and len(black_vals) > 0
@@ -224,6 +225,35 @@ def main():
     print(
         "When white is better (positive difference), then we expect a positive position to be maximal because the white engine finds the correct line first"
     )
+
+    # Plot histograms of the lags for positive and negative Elo differences
+    if pos_lags or neg_lags:
+        plt.figure(figsize=(8, 6))
+        bins = np.arange(-10.5, 11.5, 1)  # bins centered on integers
+        if pos_lags:
+            plt.hist(
+                pos_lags,
+                bins=bins,
+                alpha=0.6,
+                label=f"Positive diff (n={len(pos_lags)})",
+                color="blue",
+            )
+        if neg_lags:
+            plt.hist(
+                neg_lags,
+                bins=bins,
+                alpha=0.6,
+                label=f"Negative diff (n={len(neg_lags)})",
+                color="orange",
+            )
+        plt.xlabel("Maximal correlation lag")
+        plt.ylabel("Frequency")
+        plt.title("Distribution of maximal correlation lags")
+        plt.legend()
+        plt.grid(True, linestyle="--", alpha=0.5)
+        plt.show()
+    else:
+        print("No data available for plotting.")
 
 
 if __name__ == "__main__":
