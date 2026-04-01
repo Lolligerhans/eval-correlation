@@ -4,15 +4,20 @@ import numpy as np
 
 
 def extract_wv(comment):
-    """Extract the 'wv' value from a move comment string."""
+    """
+    Extract the 'wv' value from a move comment string. Uses -100 and +100 as
+    dummy values for checkmate scores.
+    """
     assert comment is not None
     if not comment:
         return None
     match = re.search(r"wv=([-+]?\d+\.?\d*)", comment)
     if match:
         return float(match.group(1))
-    assert False
-    return None
+    # Evaluation is checkmate in some number of moves
+    match = re.search(r"wv=(-?)[M#]\d*", comment)
+    assert match
+    return +100 if match.group(1) == "" else -100
 
 
 def is_book_move(comment):
