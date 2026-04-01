@@ -16,6 +16,8 @@ def extract_wv(comment):
         return 100
     if comment == "Black mates":
         return -100
+    if comment == "Fifty moves rule":
+        return 0
     if not comment:
         return None
     match = re.search(r"wv=([-+]?\d+\.?\d*)", comment)
