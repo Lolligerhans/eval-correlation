@@ -5,7 +5,7 @@ import numpy as np
 
 def extract_wv(comment):
     """Extract the 'wv' value from a move comment string."""
-    assert comment
+    assert comment is not None
     if not comment:
         return None
     match = re.search(r"wv=([-+]?\d+\.?\d*)", comment)
@@ -17,7 +17,7 @@ def extract_wv(comment):
 
 def is_book_move(comment):
     """Check if the move comment indicates a book move."""
-    assert comment
+    assert comment is not None
     return comment and "book" in comment
 
 
@@ -81,7 +81,7 @@ def cross_correlation(w, b, max_lag=10):
             continue
         # FIXME: What does corrcoef do? Is that what we want it to do?
         corr = np.corrcoef(w_slice, b_slice)[0, 1]
-        assert corr
+        assert corr is not None
         if np.isnan(corr):
             continue
         if corr > best_corr:
@@ -112,7 +112,7 @@ def process_game(game):
             continue  # skip book moves entirely
         # Not a book move: use it
         wv = extract_wv(comment)
-        assert wv
+        assert wv is not None
         if wv is None:
             continue  # no evaluation, skip
         # Determine side: ply is 1-indexed
@@ -126,8 +126,8 @@ def process_game(game):
             break
 
     # If we didn't get any moves, skip
-    assert white_vals
-    assert black_vals
+    assert white_vals is not None
+    assert black_vals is not None
     if not white_vals or not black_vals:
         return None, None
 
@@ -142,8 +142,8 @@ def process_game(game):
     # Normalize
     w_norm = normalize_sequence(white_vals)
     b_norm = normalize_sequence(black_vals)
-    assert w_norm
-    assert b_norm
+    assert w_norm is not None
+    assert b_norm is not None
     if w_norm is None or b_norm is None:
         return None, None
 
