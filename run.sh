@@ -47,6 +47,7 @@ load_version "$dotfiles/scripts/version.sh" "0.0.0";
 # ╭──────────────────────╮
 # │ 🗺 Globals           │
 # ╰──────────────────────╯
+declare -r python_binary="venv/bin/python3"
 # ╭──────────────────────╮
 # │ ⌨  Commands          │
 # ╰──────────────────────╯
@@ -54,8 +55,12 @@ load_version "$dotfiles/scripts/version.sh" "0.0.0";
 # Default command (when no arguments are given)
 command_default() {
 
-    venv/bin/python3 main.py
+    "$python_binary" main.py
 
+}
+
+command_analyze() {
+    "$python_binary" main.py ./TCEC_Season_29_-_Division_P.pgn
 }
 
 # ╭──────────────────────╮
