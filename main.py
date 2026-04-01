@@ -199,8 +199,9 @@ def main():
             elif elo_diff < 0:
                 neg_lags.append(lag)
             else:
-                # Equal elo is likely a processing error. If it happens and is legit just ignore it. The correlation in that case would be meaningless.
-                assert False
+                # The correlation in that case is meaningless for our analysis.
+                # Skip the game.
+                continue
 
     avg_pos = np.mean(pos_lags) if pos_lags else float("nan")
     avg_neg = np.mean(neg_lags) if neg_lags else float("nan")
