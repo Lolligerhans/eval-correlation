@@ -172,7 +172,7 @@ def main():
         print("Usage: python script.py games.pgn")
         # For testing lets just assume some default file exists. Eventually we
         # could also just quit here.
-        filename = "games.pgn"
+        filename = "test/games.pgn"
         # sys.exit(1)
     else:
         filename = sys.argv[1]

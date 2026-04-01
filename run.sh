@@ -29,9 +29,9 @@ _run_config["error_frames"]=4 # {1, 2, ...}
 # │ 🗀 Dependencies      │
 # ╰──────────────────────╯
 # ✔ Ensure versions with satisfy_version
-satisfy_version "$dotfiles/scripts/boilerplate.sh" "0.0.0";
+satisfy_version "$dotfiles/scripts/boilerplate.sh" "0.0.0"
 # ✔ Source versioned dependencies with load_version
-load_version "$dotfiles/scripts/version.sh" "0.0.0";
+load_version "$dotfiles/scripts/version.sh" "0.0.0"
 #load_version "$dotfiles/scripts/assert.sh"
 #load_version "$dotfiles/scripts/bash_meta.sh"
 #load_version "$dotfiles/scripts/cache.sh"
@@ -48,6 +48,7 @@ load_version "$dotfiles/scripts/version.sh" "0.0.0";
 # │ 🗺 Globals           │
 # ╰──────────────────────╯
 declare -r python_binary="venv/bin/python3"
+declare -r test_games="test/games.pgn"
 # ╭──────────────────────╮
 # │ ⌨  Commands          │
 # ╰──────────────────────╯
@@ -55,7 +56,7 @@ declare -r python_binary="venv/bin/python3"
 # Default command (when no arguments are given)
 command_default() {
     # Use smaller testing file
-    "$python_binary" main.py
+    "$python_binary" main.py "test/games.pgn"
 }
 
 command_analyze() {
