@@ -54,12 +54,12 @@ declare -r python_binary="venv/bin/python3"
 
 # Default command (when no arguments are given)
 command_default() {
-
+    # Use smaller testing file
     "$python_binary" main.py
-
 }
 
 command_analyze() {
+    # Use real data as input
     "$python_binary" main.py ./TCEC_Season_29_-_Division_P.pgn
 }
 
