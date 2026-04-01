@@ -157,8 +157,12 @@ def main():
 
     if len(sys.argv) != 2:
         print("Usage: python script.py games.pgn")
-        sys.exit(1)
-    filename = sys.argv[1]
+        # For testing lets just assume some default file exists. Eventually we
+        # could also just quit here.
+        filename = "games.pgn"
+        # sys.exit(1)
+    else:
+        filename = sys.argv[1]
 
     pos_lags = []
     neg_lags = []
