@@ -53,10 +53,12 @@ def normalize_sequence(vals):
     step = last - first
     trend = [first + step * i / (n - 1) for i in range(n)]
     detrended = [v - t for v, t in zip(vals, trend)]
+    assert vals != [0] * n
     std = np.std(detrended)
     if std == 0:
         return np.zeros(n)  # all constant after detrending
-    return np.array(detrended) / std
+    result = np.array(detrended) / std
+    return result
 
 
 # TODO: Possibly normalize correlation by number of overlapping positions
@@ -167,6 +169,12 @@ def process_game(game):
         return None, None
     white_vals = white_vals[:min_len]
     black_vals = black_vals[:min_len]
+
+    # Not sure what is going on here
+    if all(v == 0 for v in white_vals):
+        return None, None
+    if all(v == 0 for v in black_vals):
+        return None, None
 
     # Normalize
     w_norm = normalize_sequence(white_vals)
