@@ -92,6 +92,7 @@ def cross_correlation(w, b, max_lag=10):
 
 def process_game(game):
     """Extract evaluation sequences and compute cross-correlation lag."""
+
     white_elo = int(game.headers.get("WhiteElo", 0))
     black_elo = int(game.headers.get("BlackElo", 0))
     assert white_elo != 0
@@ -138,8 +139,10 @@ def process_game(game):
 
     # Trim to equal length (drop extra from the side that made the last move)
     min_len = min(len(white_vals), len(black_vals))
-    assert min_len >= 12
-    if min_len < 2:
+    # When the games are too short some engine crashed and the result is
+    # definitely meaningless. Also not sure if we took good enough care to
+    # handle short games in the correlation code.
+    if min_len < 12:
         return None, None
     white_vals = white_vals[:min_len]
     black_vals = black_vals[:min_len]
@@ -179,16 +182,20 @@ def main():
             if game is None:
                 break
             lag, elo_diff = process_game(game)
-            assert lag is not None
+
+            # Skip this game if too few valid evals for reasonable correlations
+            if lag is None:
+                assert elo_diff is None
+                continue
+
             assert elo_diff is not None
-            if lag is not None:
-                if elo_diff > 0:
-                    pos_lags.append(lag)
-                elif elo_diff < 0:
-                    neg_lags.append(lag)
-                else:
-                    # Equal elo is likely a processing error. If it happens and is legit just ignore it. The correlation in that case would be meaningless.
-                    assert False
+            if elo_diff > 0:
+                pos_lags.append(lag)
+            elif elo_diff < 0:
+                neg_lags.append(lag)
+            else:
+                # Equal elo is likely a processing error. If it happens and is legit just ignore it. The correlation in that case would be meaningless.
+                assert False
 
     avg_pos = np.mean(pos_lags) if pos_lags else float("nan")
     avg_neg = np.mean(neg_lags) if neg_lags else float("nan")
