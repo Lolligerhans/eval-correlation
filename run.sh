@@ -56,7 +56,7 @@ declare -r histogram_file="lag_histogram.png"
 
 # Default command (when no arguments are given)
 command_default() {
-    subcommand swiss
+    subcommand files data/*
 }
 
 # Wrapper for analyze_files. Could later add --help and pass files to argv
