@@ -58,6 +58,12 @@ command_default() {
     subcommand swiss
 }
 
+# Wrapper for analyze_files. Could later add --help and pass files to argv
+# instead of using complete $@.
+command_files() {
+    analyze_files "$@"
+}
+
 command_test() {
     "$python_binary" main.py "test/games.pgn"
 }
