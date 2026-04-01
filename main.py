@@ -10,6 +10,11 @@ def extract_wv(comment):
     dummy values for checkmate scores.
     """
     assert comment is not None
+    if comment.startswith("White wins"):
+        # TB adjudication
+        return +100
+    if comment.startswith("Black wins"):
+        return -100
     if comment == "3-Fold repetition":
         return 0
     if comment == "White mates":
