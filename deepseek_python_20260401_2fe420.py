@@ -163,6 +163,7 @@ def main():
         # sys.exit(1)
     else:
         filename = sys.argv[1]
+    print(f"Reading {filename}")
 
     pos_lags = []
     neg_lags = []
