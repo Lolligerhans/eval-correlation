@@ -251,7 +251,10 @@ def main():
         plt.title("Distribution of maximal correlation lags")
         plt.legend()
         plt.grid(True, linestyle="--", alpha=0.5)
-        plt.show()
+        # Save figure to file instead of showing
+        output_filename = "lag_histogram.png"
+        plt.savefig(output_filename, dpi=150, bbox_inches="tight")
+        print(f"Histogram saved as '{output_filename}'")
     else:
         print("No data available for plotting.")
 

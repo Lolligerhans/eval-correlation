@@ -49,6 +49,7 @@ load_version "$dotfiles/scripts/version.sh" "0.0.0"
 # ╰──────────────────────╯
 declare -r python_binary="venv/bin/python3"
 declare -r test_games="test/games.pgn"
+declare -r histogram_file="lag_histogram.png"
 # ╭──────────────────────╮
 # │ ⌨  Commands          │
 # ╰──────────────────────╯
@@ -84,6 +85,11 @@ command_swiss() {
 analyze_files() {
     echoL "Analyzing:" "$@"
     "$python_binary" main.py <(cat "$@")
+    show_png "$histogram_file"
+}
+
+show_png() {
+    xdg-open "$@"
 }
 
 # ╭──────────────────────╮
