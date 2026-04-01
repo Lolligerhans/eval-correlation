@@ -73,7 +73,7 @@ command_swiss() {
 # ╰──────────────────────╯
 # Run analysis scrip on all files in $@
 analyze_files() {
-    "$python_binary" main.py "$@"
+    "$python_binary" main.py <(cat "$@")
 }
 
 # ╭──────────────────────╮
