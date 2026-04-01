@@ -20,8 +20,6 @@ def extract_wv(comment):
         return 0
     if comment == "Insufficient material":
         return 0
-    if not comment:
-        return None
     match = re.search(r"wv=([-+]?\d+\.?\d*)", comment)
     if match:
         return float(match.group(1))
